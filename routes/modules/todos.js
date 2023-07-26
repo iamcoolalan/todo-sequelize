@@ -4,13 +4,20 @@ const router = express.Router()
 const db = require('../../models')
 const Todo = db.Todo
 
-router.get('/', (req, res) => {
-  return Todo.findAll({
-    raw: true,
-    nest: true
+router.get('/new', (req, res) => {
+  res.render('new')
+})
+
+router.post('/new', (req, res) => {
+  const UserId = req.user.id
+  const name = req.body.name
+
+  Todo.create({ 
+    name,
+    UserId
   })
-    .then(todos => res.render('index', { todos }))
-    .catch(err => res.json(err))
+    .then(() => res.redirect('/'))
+    
 })
 
 router.get('/:id', (req, res) => {
