@@ -19,6 +19,7 @@ module.exports = app => {
         return bcrypt.compare(password, user.password)
           .then(isMatch => {
             if(!isMatch){
+              console.log('unPass')
               return done(null, false, { message: 'Email or Password wrong' })
             }
             return done(null, user)
@@ -31,7 +32,7 @@ module.exports = app => {
     done(null, user.id)
   })
 
-  passport.deserializeUser((id, user) => {
+  passport.deserializeUser((id, done) => {
     User.findByPk(id)
       .then(user => {
         user = user.toJSON()

@@ -9,8 +9,6 @@ const usePassport = require('./config/passport')
 const PORT = 3000
 const routes = require('./routes/index')
 
-usePassport(app)
-
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
@@ -19,6 +17,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+
+usePassport(app)
+
 app.use(express.urlencoded({ extended: true })) //body-parser
 app.use(methodOverride('_method'))
 app.use(routes)
