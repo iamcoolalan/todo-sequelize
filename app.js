@@ -5,6 +5,7 @@ const session = require('express-session')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const usePassport = require('./config/passport')
+const flash = require('connect-flash')
 
 const PORT = 3000
 const routes = require('./routes/index')
@@ -22,6 +23,12 @@ usePassport(app)
 
 app.use(express.urlencoded({ extended: true })) //body-parser
 app.use(methodOverride('_method'))
+app.use(flash())
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  next()
+})
 app.use(routes)
 
 app.listen(PORT, () => {
