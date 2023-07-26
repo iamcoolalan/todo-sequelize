@@ -4,11 +4,12 @@ const router = express.Router()
 const db = require('../../models')
 const Todo = db.Todo
 
+//create
 router.get('/new', (req, res) => {
   res.render('new')
 })
 
-router.post('/new', (req, res) => {
+router.post('/', (req, res) => {
   const UserId = req.user.id
   const name = req.body.name
 
@@ -21,6 +22,7 @@ router.post('/new', (req, res) => {
     
 })
 
+//read detail
 router.get('/:id', (req, res) => {
   const id = req.params.id
   const UserId = req.user.id
@@ -30,6 +32,7 @@ router.get('/:id', (req, res) => {
     .catch(err => console.log(err))
 })
 
+//edit
 router.get('/edit/:id', (req, res) => {
   const id = req.params.id
   const UserId = req.user.id
@@ -39,7 +42,7 @@ router.get('/edit/:id', (req, res) => {
     .catch(err => console.log(err))
 })
 
-router.put('/edit/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   const id = req.params.id
   const UserId = req.user.id
   const {name, isDone} = req.body
@@ -55,5 +58,15 @@ router.put('/edit/:id', (req, res) => {
     .catch(err => console.log(err))
 })
 
+//delete
+router.delete('/:id', (req, res) => {
+  const id = req.params.id
+  const UserId = req.user.id
+
+  return Todo.findOne({ where: { id, UserId } })
+    .then(todo => todo.destroy())
+    .then(() => res.redirect('/'))
+    .catch(err => console.log(err))
+})
 
 module.exports = router
